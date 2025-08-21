@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Youth THA</title>
+  <link rel="icon" href="Youth THA.jpg" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --teal:#175f5c;        /* สีธีมตามที่ขอ */
+      --teal-dark:#0d3d3b;
+      --text:#111827;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Sarabun',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background: var(--teal);
+      min-height:100vh;padding:20px;
+    }
+
+    /* โลโก้เต็มแถบบนสุด */
+    .logo-banner{
+      width:100%;position:relative;overflow:hidden;border-radius:16px;
+      box-shadow:0 12px 28px rgba(0,0,0,.18);margin:0 auto 16px;
+    }
+    .logo-banner img{width:100%;height:auto;display:block;object-fit:cover}
+    @media (max-width:768px){ .logo-banner{border-radius:12px} }
+
+    .container{
+      max-width:980px;margin:0 auto;
+      background:rgba(255,255,255,0.95);
+      backdrop-filter:blur(10px);
+      border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.18);
+      overflow:hidden;animation:slideUp .6s ease-out;
+    }
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* เปลี่ยนหัวข้อเป็น #175f5c */
+    .header{
+      background: var(--teal);
+      color:#fff;padding:30px;text-align:center;position:relative;overflow:hidden;
+    }
+    .header::before{
+      content:'';position:absolute;inset:0;
+      background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity:.35;
+    }
+    .header h1{font-size:2.2rem;margin-bottom:10px;position:relative;z-index:1}
+    .header p{font-size:1.1rem;opacity:.9;position:relative;z-index:1}
+
+    /* Tabs */
+    .tabs{
+      display:flex;gap:10px;padding:14px 20px;background:#fff;border-bottom:1px solid #e5e7eb;
+      position:sticky;top:0;z-index:10;
+    }
+    .tab-btn{
+      flex:0 0 auto;padding:10px 16px;border:2px solid #e5e7eb;border-radius:12px;background:#fff;
+      font-weight:700;cursor:pointer;transition:.25s;color:#374151;
+    }
+    .tab-btn:hover{border-color:#9ca3af;transform:translateY(-1px)}
+    .tab-btn.active{background:linear-gradient(135deg,#175f5c,#5e908d);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(79,70,229,.25)}
+
+    .section{display:none;padding:24px 24px 36px}
+    .section.active{display:block}
+
+    .form-container{padding:8px 0 0}
+
+    .form-group{margin-bottom:25px;position:relative;transition:all .3s ease}
+    .form-group label{display:block;margin-bottom:8px;font-weight:600;color:#374151;font-size:1rem}
+    .required{color:#ef4444}
+
+    /* base control */
+    .form-control{
+      width:100%;padding:15px;border:2px solid var(--teal-dark);border-radius:12px;font-size:1rem;
+      transition:.3s;background:var(--teal);color:#fff;
+    }
+    .form-control:hover{border-color:#ffffffaa}
+    .form-control::placeholder{color:#d1d5db}
+
+    /* ช่องพิมพ์: พื้นหลังขาว */
+    input.form-control:not([type="radio"]):not([type="checkbox"]),
+    textarea.form-control{
+      background:#ffffff;color:#111827;
+    }
+    input.form-control:not([type="radio"]):not([type="checkbox"]):focus,
+    textarea.form-control:focus{
+      outline:none;border-color:var(--teal);
+      box-shadow:0 0 0 3px rgba(23,95,92,.25);
+      transform:translateY(-2px);
+    }
+    input.form-control::placeholder,
+    textarea.form-control::placeholder{color:#6b7280}
+
+    /* select (dropdown) */
+    select.form-control{
+      appearance:none;-webkit-appearance:none;-moz-appearance:none;
+      background-image:url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat:no-repeat;background-position:right 12px center;background-size:20px;padding-right:44px
+    }
+    select.form-control:focus{
+      outline:none;border-color:#ffffff;box-shadow:0 0 0 3px rgba(255,255,255,.25);transform:translateY(-2px)
+    }
+
+    .priority-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:15px;margin-top:10px}
+    .priority-option{position:relative}
+    .priority-option input[type="radio"]{position:absolute;opacity:0}
+    .priority-label{
+      display:block;padding:15px;border:2px solid #e5e7eb;border-radius:12px;text-align:center;cursor:pointer;
+      transition:.25s;background:#fff;font-weight:500;color:var(--text);
+    }
+    .priority-option input[type="radio"]:checked+.priority-label{border-color:#4f46e5;background:#4f46e5;color:#fff;transform:scale(1.05)}
+    .priority-low{border-color:#10b981!important}.priority-option input[type="radio"]:checked+.priority-low{background:#10b981!important;color:#fff}
+    .priority-medium{border-color:#f59e0b!important}.priority-option input[type="radio"]:checked+.priority-medium{background:#f59e0b!important;color:#fff}
+    .priority-high{border-color:#ef4444!important}.priority-option input[type="radio"]:checked+.priority-high{background:#ef4444!important;color:#fff}
+
+    .submit-btn{
+      width:100%;padding:18px;background:linear-gradient(135deg,#175f5c,#5e908d);color:#fff;border:none;border-radius:12px;
+      font-size:1.1rem;font-weight:600;cursor:pointer;transition:.3s;margin-top:20px;position:relative;overflow:hidden
+    }
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(79,70,229,.3)}
+    .submit-btn:active{transform:translateY(0)}
+    .submit-btn::before{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .5s
+    }
+    .submit-btn:hover::before{left:100%}
+
+    .success-message{
+      display:none;background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:20px;border-radius:12px;margin-top:20px;text-align:center;
+      animation:fadeIn .5s ease-out
+    }
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    .floating-elements{position:fixed;inset:0;pointer-events:none;z-index:-1}
+    .floating-circle{position:absolute;border-radius:50%;background:rgba(255,255,255,.1);animation:float 6s ease-in-out infinite}
+    .floating-circle:nth-child(1){width:80px;height:80px;top:20%;left:10%;animation-delay:0s}
+    .floating-circle:nth-child(2){width:120px;height:120px;top:60%;right:10%;animation-delay:2s}
+    .floating-circle:nth-child(3){width:60px;height:60px;bottom:20%;left:20%;animation-delay:4s}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+    /* ปุ่มลอย */
+    .developer-button{
+      position:fixed;bottom:20px;right:20px;background:#1e88e5;color:#fff;padding:12px 20px;border-radius:30px;text-decoration:none;
+      font-size:.95rem;box-shadow:0 4px 10px rgba(0,0,0,.2);transition:.3s;z-index:1000
+    }
+    .developer-button:hover{background:#1565c0;transform:translateY(-2px)}
+
+    .track-button{
+      position:fixed;bottom:20px;left:20px;background:var(--teal-dark);color:#fff;padding:12px 20px;border-radius:30px;text-decoration:none;
+      font-size:.95rem;box-shadow:0 4px 10px rgba(0,0,0,.2);transition:.3s;z-index:1000
+    }
+    .track-button:hover{background:#094240;transform:translateY(-2px)}
+
+    .status-tip{margin:-6px 0 14px;color:#374151;font-size:.95rem;opacity:.85}
+    .looker-wrap{width:100%;height:70vh;border:0;border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.08)}
+
+    @media (max-width:768px){
+      .container{margin:0 10px}
+      .header h1{font-size:1.8rem}
+      .tabs{gap:8px;padding:12px 12px}
+      .tab-btn{padding:9px 12px;font-size:.95rem}
+      .priority-group{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- ตัวเลือกภาษา -->
+  <div id="languageSwitcher" style="position: fixed; top: 20px; left: 20px; z-index: 999;">
+    <select id="languageSelect" style="padding:8px 12px;border-radius:10px;font-weight:600;font-family:'Sarabun';background:white;border:2px solid #ccc;box-shadow:0 2px 6px rgba(0,0,0,0.1);transition:.3s">
+      <option value="th">  TH ภาษาไทย </option>
+      <option value="en">  US English </option>
+    </select>
+  </div>
+
+  <!-- องค์ประกอบตกแต่ง -->
+  <div class="floating-elements">
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+  </div>
+
+  <!-- โลโก้เต็มแถบบนสุด -->
+  <div class="logo-banner" aria-label="Youth THA Logo">
+    <img src="Youth THA.jpg" alt="โลโก้ Youth THA" />
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1 id="title">Youth THA</h1>
+      <p id="subtitle">แพลตฟอร์ม</p>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist" aria-label="main navigation">
+      <button id="tab-form" class="tab-btn active" role="tab" aria-selected="true" aria-controls="section-form">📝 แบบฟอร์มแจ้งซ่อม</button>
+      <button id="tab-status" class="tab-btn" role="tab" aria-selected="false" aria-controls="section-status">📊 สถานะรายงาน</button>
+    </nav>
+
+    <!-- Section: Form -->
+    <section id="section-form" class="section active" role="tabpanel" aria-labelledby="tab-form">
+      <div class="form-container">
+        <form id="repairForm">
+          <div class="form-group">
+            <label for="studentName" id="label-name">ชื่อ-นามสกุล <span class="required">*</span></label>
+            <input type="text" id="studentName" class="form-control" required placeholder="กรุณากรอกชื่อ-นามสกุล หากไม่ต้องการระบุให้พิมพ์ ไม่ประสงค์ออกนาม" />
+          </div>
+
+          <!-- dropdown ประเภทการรายงาน -->
+          <div class="form-group">
+            <label for="reportType" id="label-id">ประเภทของการรายงาน <span class="required">*</span></label>
+            <select id="reportType" class="form-control" required>
+              <option value="" id="opt-placeholder">-- เลือกประเภท --</option>
+              <option value="เสนอความคิดเห็น" id="opt-idea">เสนอความคิดเห็น</option>
+              <option value="เสนอปัญหา" id="opt-issue">เสนอปัญหา</option>
+              <option value="เสนอนโยบาย" id="opt-policy">เสนอนโยบาย</option>
+              <option value="รายงานปัญหาที่ตนพบเจอ" id="opt-selfreport">รายงานปัญหาที่ตนพบเจอ</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="location" id="label-location">สถานที่/ห้อง <span class="required">*</span></label>
+            <input type="text" id="location" class="form-control" required placeholder="เช่น ห้องเรียน 3205, ห้องคอมพิวเตอร์, ห้องน้ำ" />
+          </div>
+
+          <div class="form-group">
+            <label for="equipment" id="label-equipment">อุปกรณ์ที่ต้องการซ่อม <span class="required">*</span></label>
+            <input type="text" id="equipment" class="form-control" required placeholder="เช่น หลอดไฟ, พัดลม, เครื่องปรับอากาศ" />
+          </div>
+
+          <div class="form-group">
+            <label for="problemDescription" id="label-problem">รายละเอียดของปัญหา <span class="required">*</span></label>
+            <textarea id="problemDescription" class="form-control" required placeholder="กรุณาอธิบายปัญหาที่พบ เช่น การทำงานผิดปกติ, ส่งผลกระทบต่อตัวเราอย่างไร หรือสาเหตุที่คาดว่าทำให้เกิดความเสียหาย"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label id="label-priority">ระดับความเร่งด่วน <span class="required">*</span></label>
+            <div class="priority-group">
+              <div class="priority-option">
+                <input type="radio" id="priorityLow" name="priority" value="ต่ำ" required />
+                <label for="priorityLow" class="priority-label priority-low" id="priority-low-label">
+                  🟢 <span id="priority-low-text">ต่ำ</span><br/>
+                  <small id="priority-low-desc">ไม่เร่งด่วน</small>
+                </label>
+              </div>
+              <div class="priority-option">
+                <input type="radio" id="priorityMedium" name="priority" value="ปานกลาง" required />
+                <label for="priorityMedium" class="priority-label priority-medium" id="priority-medium-label">
+                  🟡 <span id="priority-medium-text">ปานกลาง</span><br/>
+                  <small id="priority-medium-desc">ใช้งานได้บ้าง</small>
+                </label>
+              </div>
+              <div class="priority-option">
+                <input type="radio" id="priorityHigh" name="priority" value="สูง" required />
+                <label for="priorityHigh" class="priority-label priority-high" id="priority-high-label">
+                  🔴 <span id="priority-high-text">สูง</span><br/>
+                  <small id="priority-high-desc">เร่งด่วน</small>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactInfo" id="label-contact">ช่องทางติดต่อกลับ</label>
+            <input type="text" id="contactInfo" class="form-control" placeholder="Line ID หรือ Instagram account เพื่อติดตามสถานะการซ่อมแซม (ไม่บังคับ)" />
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">📤 ส่งรายงานการซ่อม</button>
+
+          <div id="successMessage" class="success-message">
+            <h3 id="successTitle">✅ ส่งรายงานเรียบร้อยแล้ว!</h3>
+            <p id="successDetail">ทางสภานักเรียนจะประสานกับคณะผู้บริหาร และทีมช่างโดยเร็ว <br/>
+              หมายเลขรายงาน: <span id="reportNumber"></span>
+            </p>
+            <!-- ปุ่มติดตามสถานะ (ในกรอบผลลัพธ์) -->
+            <button type="button" id="trackStatusBtn2" class="submit-btn" style="background:linear-gradient(135deg,var(--teal),#0d3d3b);margin-top:10px">
+              🔎 ติดตามสถานะ
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Section: Status (Looker Studio) -->
+    <section id="section-status" class="section" role="tabpanel" aria-labelledby="tab-status">
+      <p class="status-tip" id="statusTip">แผงสถานะด้านล่างนี้เป็นรายงาน Looker Studio แบบฝังตัว หากไม่แสดงโปรดตรวจสอบการอนุญาต “Embed report”</p>
+      <iframe class="looker-wrap"
+        title="สถานะการแจ้งซ่อม (Looker Studio)"
+        loading="lazy"
+        allowfullscreen
+        src="https://lookerstudio.google.com/embed/reporting/8d86d734-53f2-4237-ab34-fb51cc170d69">
+      </iframe>
+    </section>
+  </div>
+
+  <a href="developer.html" class="developer-button" id="developerBtn">เกี่ยวกับผู้พัฒนา</a>
+
+  <script>
+    // ===== Translations =====
+    const translations = {
+      th: {
+        title: "Youth THA",
+        subtitle: "แพลตฟอร์มในการเสนอความคิดเห็น ปัญหา เพื่อนำไปเสนอต่อหน่วยงานภาครัฐ",
+        labelName: "ชื่อ-นามสกุล",
+        placeholderName: "กรุณากรอกชื่อ-นามสกุล",
+        labelId: "ประเภทของการรายงาน",
+        reportTypePlaceholder: "-- กรุณาเลือกประเภท --",
+        reportTypeIdea: "เสนอความคิดเห็น",
+        reportTypeIssue: "เสนอปัญหา",
+        reportTypePolicy: "เสนอนโยบาย",
+        reportTypeSelf: "รายงานปัญหาที่ตนพบเจอ",
+        labelLocation: "สิ่งที่เราอยากบอก",
+        placeholderLocation: "เช่น นโยบายที่อยากให้เกิดขึ้นจริง",
+        labelEquipment: "สิ่งนี้เกิดประโยชน์กับใคร",
+        placeholderEquipment: "เช่น คนในชุมชน, ประชาชนทั่วไป",
+        labelProblem: "รายละเอียดของสิ่งที่เราเสนอ",
+        placeholderProblem: "กรุณาอธิบายถึงรายละเอียด",
+        labelPriority: "ระดับความเร่งด่วน",
+        priorityLow: "ต่ำ", priorityLowDesc: "ไม่เร่งด่วนมากนัก",
+        priorityMedium: "ปานกลาง", priorityMediumDesc: "เร่งด่วนระดับนึง",
+        priorityHigh: "สูง", priorityHighDesc: "เร่งด่วน",
+        labelContact: "ช่องทางติดต่อกลับ (ไม่บังคับ)",
+        placeholderContact: "Line ID ติดตามสถานะผ่าน LineOA Youth THA",
+        submitBtn: "📤 ส่งรายงานการซ่อม",
+        submitBtnLoading: "⏳ กำลังส่งข้อมูล...",
+        successTitle: "✅ ส่งรายงานเรียบร้อยแล้ว!",
+        successDetail: "ทางเราจะนำไปเสนอต่อหน่วยงานภาครัฐ <br>หมายเลขรายงาน:",
+        developerBtn: "เกี่ยวกับผู้พัฒนา",
+        errorMessage: "เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง",
+        menuForm: "📝 แบบฟอร์มการรายงาน",
+        menuStatus: "📊 สถานะรายงาน",
+        statusTip: "เรื่องที่ทุกคนแจ้งมา อัปเดตเรียลไทม์",
+        trackBtn: "ติดตามสถานะ"
+      },
+      en: {
+        title: "Youth THA",
+        subtitle: "Channeling public opinion and issues to government authorities.",
+        labelName: "Full Name",
+        placeholderName: "Please enter your first and last name.",
+        labelId: "Report Type",
+        reportTypePlaceholder: "-- Choose a type --",
+        reportTypeIdea: "Submit a suggestion",
+        reportTypeIssue: "Raise an issue",
+        reportTypePolicy: "Propose a policy",
+        reportTypeSelf: "Report an incident you found",
+        labelLocation: "Your message",
+        placeholderLocation: "Such as policies that you want to make",
+        labelEquipment: "Equipment to Repair",
+        placeholderEquipment: "e.g., Light bulb, Fan, Air conditioner",
+        labelProblem: "Problem Description",
+        placeholderProblem: "Describe the problem, impacts, or suspected causes",
+        labelPriority: "Urgency Level",
+        priorityLow: "Low", priorityLowDesc: "Not urgent",
+        priorityMedium: "Medium", priorityMediumDesc: "Partially usable",
+        priorityHigh: "High", priorityHighDesc: "Urgent",
+        labelContact: "Contact Information",
+        placeholderContact: "Line ID to track repair status with LineOA TUPP SC",
+        submitBtn: "📤 Submit Report",
+        submitBtnLoading: "⏳ Submitting...",
+        successTitle: "✅ Report Submitted Successfully!",
+        successDetail: "We will coordinate promptly.<br>Report ID:",
+        developerBtn: "About Developer",
+        errorMessage: "An error occurred while submitting the data. Please try again.",
+        menuForm: "📝 Form",
+        menuStatus: "📊 Status",
+        statusTip: "Status is updated in real time",
+        trackBtn: "Track status"
+      }
+    };
+
+    // ===== Google Sheets URL =====
+    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxbx0X973rUfd2SYlJ68CN0nTlCYuEUg2YDVb_RHEcizjX0rwzEJkSSlwDOkA_pPJsV/exec';
+
+    let reportCounter = 1;
+    let currentLanguage = 'th';
+
+    function formatBangkokCE(date = new Date()){
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Bangkok',
+        year:'numeric',month:'2-digit',day:'2-digit',
+        hour:'2-digit',minute:'2-digit',second:'2-digit',
+        hour12:false
+      }).formatToParts(date);
+      const get = (t)=>parts.find(p=>p.type===t)?.value||'';
+      return `${get('day')}/${get('month')}/${get('year')} ${get('hour')}:${get('minute')}:${get('second')}`;
+    }
+
+    function switchLanguage(lang){
+      currentLanguage = lang;
+      const t = translations[lang];
+
+      const els = [
+        '#title','#subtitle','#label-name','#label-id','#label-location',
+        '#label-equipment','#label-problem','#label-priority','#label-contact',
+        '#submitBtn','#successTitle','#successDetail','#developerBtn',
+        '#priority-low-text','#priority-medium-text','#priority-high-text',
+        '#priority-low-desc','#priority-medium-desc','#priority-high-desc',
+        '#tab-form','#tab-status','#statusTip','#opt-placeholder',
+        '#opt-idea','#opt-issue','#opt-policy','#opt-selfreport'
+      ];
+      els.forEach(sel=>{const el=document.querySelector(sel); if(el) el.style.opacity='0'});
+
+      setTimeout(()=>{
+        document.getElementById('title').textContent = t.title;
+        document.getElementById('subtitle').textContent = t.subtitle;
+        document.getElementById('label-name').innerHTML = `${t.labelName} <span class="required">*</span>`;
+        document.getElementById('label-id').innerHTML = `${t.labelId} <span class="required">*</span>`;
+        document.getElementById('label-location').innerHTML = `${t.labelLocation} <span class="required">*</span>`;
+        document.getElementById('label-equipment').innerHTML = `${t.labelEquipment} <span class="required">*</span>`;
+        document.getElementById('label-problem').innerHTML = `${t.labelProblem} <span class="required">*</span>`;
+        document.getElementById('label-priority').innerHTML = `${t.labelPriority} <span class="required">*</span>`;
+        document.getElementById('label-contact').textContent = t.labelContact;
+
+        document.getElementById('submitBtn').textContent = t.submitBtn;
+        document.getElementById('successTitle').textContent = t.successTitle;
+        document.getElementById('successDetail').innerHTML = `${t.successDetail} <span id="reportNumber"></span>`;
+        document.getElementById('developerBtn').textContent = t.developerBtn;
+
+        // placeholders
+        document.getElementById('studentName').placeholder = t.placeholderName;
+        document.getElementById('location').placeholder = t.placeholderLocation;
+        document.getElementById('equipment').placeholder = t.placeholderEquipment;
+        document.getElementById('problemDescription').placeholder = t.placeholderProblem;
+        document.getElementById('contactInfo').placeholder = t.placeholderContact;
+
+        // dropdown texts
+        document.getElementById('opt-placeholder').textContent = t.reportTypePlaceholder;
+        document.getElementById('opt-idea').textContent = t.reportTypeIdea;
+        document.getElementById('opt-issue').textContent = t.reportTypeIssue;
+        document.getElementById('opt-policy').textContent = t.reportTypePolicy;
+        document.getElementById('opt-selfreport').textContent = t.reportTypeSelf;
+
+        // priority labels & values
+        document.getElementById('priority-low-text').textContent = t.priorityLow;
+        document.getElementById('priority-medium-text').textContent = t.priorityMedium;
+        document.getElementById('priority-high-text').textContent = t.priorityHigh;
+        document.getElementById('priority-low-desc').textContent = t.priorityLowDesc;
+        document.getElementById('priority-medium-desc').textContent = t.priorityMediumDesc;
+        document.getElementById('priority-high-desc').textContent = t.priorityHighDesc;
+
+        document.getElementById('priorityLow').value = t.priorityLow;
+        document.getElementById('priorityMedium').value = t.priorityMedium;
+        document.getElementById('priorityHigh').value = t.priorityHigh;
+
+        // tabs
+        document.getElementById('tab-form').textContent = t.menuForm;
+        document.getElementById('tab-status').textContent = t.menuStatus;
+        document.getElementById('statusTip').textContent = t.statusTip;
+
+        // track buttons text
+        const tb1 = document.getElementById('trackStatusBtn');
+        const tb2 = document.getElementById('trackStatusBtn2');
+        if (tb1) tb1.textContent = t.trackBtn;
+        if (tb2) tb2.textContent = t.trackBtn;
+
+        els.forEach(sel=>{const el=document.querySelector(sel); if(el) el.style.opacity='1'});
+      },200);
+    }
+    document.getElementById('languageSelect').addEventListener('change', function(){
+      switchLanguage(this.value);
+    });
+
+    // Tabs
+    const tabForm = document.getElementById('tab-form');
+    const tabStatus = document.getElementById('tab-status');
+    const sectionForm = document.getElementById('section-form');
+    const sectionStatus = document.getElementById('section-status');
+
+    function setActiveTab(which){
+      const isForm = which==='form';
+      tabForm.classList.toggle('active', isForm);
+      tabStatus.classList.toggle('active', !isForm);
+      tabForm.setAttribute('aria-selected', isForm ? 'true':'false');
+      tabStatus.setAttribute('aria-selected', !isForm ? 'true':'false');
+      sectionForm.classList.toggle('active', isForm);
+      sectionStatus.classList.toggle('active', !isForm);
+    }
+    tabForm.addEventListener('click',()=>setActiveTab('form'));
+    tabStatus.addEventListener('click',()=>setActiveTab('status'));
+
+    // ไปหน้า "สถานะรายงาน"
+    function goToStatus(){
+      setActiveTab('status');
+      document.getElementById('section-status').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    // ให้ปุ่มติดตามสถานะกลับมาใช้งานได้
+    document.getElementById('trackStatusBtn')?.addEventListener('click', (e)=>{ e.preventDefault(); goToStatus(); });
+    document.getElementById('trackStatusBtn2')?.addEventListener('click', ()=> goToStatus());
+
+    // ส่งข้อมูลไป Google Apps Script
+    async function sendToGoogleSheets(data){
+      try{
+        await fetch(GOOGLE_SHEETS_URL,{
+          method:'POST',mode:'no-cors',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(data)
+        });
+        return true; // no-cors: assume success
+      }catch(err){
+        console.error('Error sending to Google Sheets:', err);
+        return false;
+      }
+    }
+
+    // Submit ฟอร์ม
+    document.getElementById('repairForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const t = translations[currentLanguage];
+
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = t.submitBtnLoading;
+      submitBtn.disabled = true;
+
+      const formData = {
+        reportId: 'RPT' + new Date().getFullYear() + String(reportCounter).padStart(4,'0'),
+        studentName: document.getElementById('studentName').value,
+        reportType: document.getElementById('reportType').value,
+        location: document.getElementById('location').value,
+        equipment: document.getElementById('equipment').value,
+        problemDescription: document.getElementById('problemDescription').value,
+        priority: document.querySelector('input[name="priority"]:checked').value,
+        contactInfo: document.getElementById('contactInfo').value || (currentLanguage==='th' ? 'ไม่ระบุ':'Not specified'),
+        timestamp: formatBangkokCE(new Date()),
+        timestampISO: new Date().toISOString(),
+        language: currentLanguage
+      };
+
+      const success = await sendToGoogleSheets(formData);
+      if(success){
+        document.getElementById('reportNumber').textContent = formData.reportId;
+        document.getElementById('successMessage').style.display = 'block';
+        document.getElementById('successMessage').scrollIntoView({behavior:'smooth',block:'center'});
+        this.reset();
+        reportCounter++;
+      }else{
+        alert(t.errorMessage);
+      }
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', ()=>{
+      switchLanguage(document.getElementById('languageSelect').value);
+      setActiveTab('form');
+    });
+  </script>
+</body>
+</html>
